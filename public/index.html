@@ -7,10 +7,10 @@
   <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.js"></script>
   <script src="index.js" defer></script>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div id="vue-app">
-
     <router-view></router-view>
 
   </div>
@@ -20,20 +20,41 @@
 <template id="home-page">
   <div class="vue-component">
 
+
+    <h2># of people: {{ people.length }}</h2>
     <h1>{{ message }}</h1>
-     <h1>Numer of people: {{ people.length }}</h1>
-
-    <div v-for="person in people">
-       <h4 v-on:click="toggleBioVisible(person)">{{ person.name }}</h4>
-      <p v-if="person.bioVisible">{{ person.bio }}
-      </p>
-      <button v-on:click="removePerson(person)">remove person</button>
+    <p>Search here:<input type="text" v-model="searchName" list="names"></p>
+    <datalist id="names">
+      <option v-for="person in people">{{ person.name }}</option>
+    </datalist>
+    <p>Search here for Bio:<input type="text" v-model="searchBio"></p>
+    <div>         
+      <button v-on:click="setSortAttribute('bio')">sort by bio</button>
+      <button v-on:click="setSortAttribute('name')">sort by name</button>
+     <!-- <transition-group name="slide-right"> -->
+    <div v-for="person in people" v-if="isValidPerson(person)">
+      <h4 v-on:click="toggleBioVisible(person)">{{ person.name }}</h4>
+      <p v-bind:class="{strike: !person.bioVisible}">{{ person.bio }}</p>
+      <p>{{ person.bioVisible }}</p>
+      <button v-on:click="removePerson(person)">Remove Person</button>
+      <hr>
     </div>
-
-    <p>name: <input type="text" v-model="newPerson.name"></p>
-    <p>bio: <input type="text" v-model="newPerson.bio"></p>
+    <ul>
+      <li v-for="error in errors">{{error}}</li>
+    </ul>
+    <p>name<input type="text" v-model="newPerson.name"></p>
+    <p>bio<input type="text" v-model="newPerson.bio"></p>
     <button v-on:click="addPerson()">Add Person</button>
-
 
   </div>
 </template>
+
+
+
+<template id="sample-page">
+  <div class="vue-component">
+    I am on the sample page
+
+  </div>
+</template>
+
